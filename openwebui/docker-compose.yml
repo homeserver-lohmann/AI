@@ -1,0 +1,53 @@
+services:
+  openwebui:
+    container_name: openwebui
+    image: ghcr.io/open-webui/open-webui:main
+    ports:
+      - "3000:8080"
+    environment:
+      - WEBUI_SECRET_KEY=empty-key
+
+      - OPENAI_API_BASE=http://192.168.42.2:8090
+      - OPENAI_API_KEY=sk-no-key-required
+
+      - ENABLE_WEB_SEARCH=true
+      - WEB_SEARCH_ENGINE=searxng
+      - SEARXNG_QUERY_URL=http://searxng:3030
+      
+      - WEB_SEARCH_RESULT_COUNT=10
+      - WEB_SEARCH_CONCURRENT_REQUESTS=3
+
+      - WEB_LOADER_ENGINE=playwright
+      - PLAYWRIGHT_WS_URL=ws://playwright:3035
+    volumes:
+      - open-webui:/app/backend/data
+    restart: unless-stopped
+    networks: [ OpenWebUI_net ]
+
+  open-terminal:
+    image: ghcr.io/open-webui/open-terminal
+    container_name: openterminal
+    volumes:
+      - open-terminal:/home/user
+    environment:
+      - OPEN_TERMINAL_API_KEY=empty-key
+    networks: [ OpenWebUI_net ]
+
+  mcpo:
+    image: ghcr.io/open-webui/mcpo:main
+    container_name: mcpo
+    ports:
+      - "3060:8000"
+    volumes:
+      - ./mcpo-config.json:/app/config.json:ro
+    command: ["--config", "/app/config.json", "--api-key", "empty-key"]
+    restart: unless-stopped
+    networks: [ OpenWebUI_net ]
+
+volumes:
+  open-webui:
+  open-terminal:
+
+networks:
+  OpenWebUI_net:
+    external: true
