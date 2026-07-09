@@ -27,8 +27,8 @@ services:
 
   playwright:
     container_name: playwright
-    image: mcr.microsoft.com/playwright:v1.61.0-noble
-    command: npx -y playwright@1.61.0 run-server --port 3035 --host 0.0.0.0
+    image: mcr.microsoft.com/playwright:v1.58.0-noble
+    command: npx -y playwright@1.58.0 run-server --port 3035 --host 0.0.0.0
     ports:
       - "3035:3035"
     restart: unless-stopped
