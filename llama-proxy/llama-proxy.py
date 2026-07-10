@@ -297,6 +297,8 @@ async def ensure_inference_ready(model_id: str):
         PC_STATE = 'ready'
 
 
+
+
 @app.api_route("/{path:path}", methods=["GET", "POST", "DELETE"])
 async def proxy(request: Request, path: str):
     print('[SERVICE] Received request for inference')
@@ -362,4 +364,4 @@ async def proxy(request: Request, path: str):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=9090)
+    uvicorn.run(app, host="0.0.0.0", port=8090)
