@@ -49,7 +49,7 @@ services:
 
 
   docling-serve:
-    image: quay.io/docling-project/docling-serve-cu128:latest
+    image: quay.io/docling-project/docling-serve-cu126:v1.12.0
     container_name: docling-serve
     ports:
       - "3070:5001"
