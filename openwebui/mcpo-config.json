@@ -8,21 +8,19 @@
       ]
     },
 
-    "web_browser": {
-      "command": "npx",
+    "pdf-parser": {
+      "command": "uvx",
       "args": [
-        "@playwright/mcp@latest"
-      ]
+        "pymupdf4llm-mcp@latest",
+        "stdio"
+      ],
+      "env": {}
     },
 
     "nixos": {
       "command": "uvx",
       "args": ["mcp-nixos"]
-    },
-
-    "lean-lsp": {
-       "command": "uvx",
-       "args": ["lean-lsp-mcp"]
     }
+
   }
 }
