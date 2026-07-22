@@ -1,4 +1,5 @@
 services:
+
   openwebui:
     container_name: openwebui
     image: ghcr.io/open-webui/open-webui:main
@@ -24,6 +25,7 @@ services:
     restart: unless-stopped
     networks: [ OpenWebUI_net ]
 
+
   open-terminal:
     image: ghcr.io/open-webui/open-terminal
     container_name: openterminal
@@ -32,6 +34,7 @@ services:
     environment:
       - OPEN_TERMINAL_API_KEY=empty-key
     networks: [ OpenWebUI_net ]
+
 
   mcpo:
     image: ghcr.io/open-webui/mcpo:main
@@ -43,6 +46,37 @@ services:
     command: ["--config", "/app/config.json", "--api-key", "empty-key"]
     restart: unless-stopped
     networks: [ OpenWebUI_net ]
+
+
+  docling-serve:
+    image: quay.io/docling-project/docling-serve-cu128:latest
+    container_name: docling-serve
+    ports:
+      - "3070:5001"
+
+    environment:
+      - DOCLING_SERVE_ENABLE_UI=true
+      - DOCLING_SERVE_ENABLE_REMOTE_SERVICES=true
+      - DOCLING_SERVE_MAX_SYNC_WAIT=1200
+      - DOCLING_SERVE_ENG_LOC_NUM_WORKERS=4
+      # CPU thread configuration
+      - OMP_NUM_THREADS=4
+      - MKL_NUM_THREADS=4
+      # IMPORTANT: Keep at 1 to avoid "Task Not Found" errors
+      - UVICORN_WORKERS=1
+
+    restart: unless-stopped
+    networks: [ OpenWebUI_net ]
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+
 
 volumes:
   open-webui:
