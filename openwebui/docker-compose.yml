@@ -57,24 +57,20 @@ services:
     environment:
       - DOCLING_SERVE_ENABLE_UI=true
       - DOCLING_SERVE_ENABLE_REMOTE_SERVICES=true
+
       - DOCLING_SERVE_MAX_SYNC_WAIT=1200
+
+      - CUDA_VISIBLE_DEVICES=1 
       - DOCLING_SERVE_ENG_LOC_NUM_WORKERS=4
-      # CPU thread configuration
+      
       - OMP_NUM_THREADS=4
       - MKL_NUM_THREADS=4
-      # IMPORTANT: Keep at 1 to avoid "Task Not Found" errors
+      
       - UVICORN_WORKERS=1
-
+    devices:
+      - nvidia.com/gpu=all 
     restart: unless-stopped
     networks: [ OpenWebUI_net ]
-
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
 
 
 
